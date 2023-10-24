@@ -33,7 +33,10 @@ function App() {
       <Router>
         <Routes>
           {/* Liste des pages */}
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route
+            path="/"
+            element={<h1 className="text-3xl font-bold underline">Home</h1>}
+          />
           <Route path="/user" element={<h1>Profil</h1>} />
         </Routes>
       </Router>

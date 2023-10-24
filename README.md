@@ -201,6 +201,8 @@ h1 {
 
 Par exemple si vous ne savez pas quels sont les classes en rapport avec les bordures, cherchez "border" dans la documentation tailwind, et vous aurez toutes les classes en rapport avec la propriété border de CSS.
 
+***Il est possible de combiner des classes CSS avec des classes Tailwind. Cependant les propriétés de Tailwind écrasent celles de CSS***
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
