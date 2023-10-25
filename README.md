@@ -28,12 +28,12 @@ npm prune
 # Organiser le projet
 ## Pages
 
-Créez un dossier pour votre page dans src/pages. Puis créez un fichier .tsx pour votre page dans ce dossier **(nom en camelCase)**.
+Créez un dossier pour votre page dans src/pages. Puis créez un fichier **index.tsx** pour votre page dans ce dossier **(nom en camelCase)**.
 
 **Exemple :**
-Dans src/pages/login, il y a un fichier login.tsx :
+Dans src/pages/signup,créez un fichier index.tsx :
 ```tsx
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div>
       <h1>Login</h1>
@@ -44,17 +44,19 @@ export default function LoginPage() {
 
 Ensuite importez le dans src/App.tsx :
 ```tsx
-import LoginPage from "./pages/login/login";
+import SignupPage from "./pages/signup";
 /* Reste du code ... */
 
 <Router>
     <Routes>
         {/* path = url de la page, element = contenu que l'on souhaite afficher sur cet URL */}
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
     </Routes>
 </Router>
 /* Reste du code ... */
 ```
+
+***Si vous voulez créer une page sur le lien /series/:serie où /series est la page pour toutes les séries et /series/:serie est la page pour une série spécifique, créez un fichier index.tsx dans src/pages/series pour la page  de toutes les series et un fichier index.tsx dans src/pages/series/serie pour la page d'une série spécifique.***
 
 ## Components
 
