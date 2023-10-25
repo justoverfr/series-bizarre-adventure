@@ -20,9 +20,19 @@ const Genres = ({ genres, setGenres, selectedGenres, setSelectedGenres }: Genres
     setGenres(genres?.filter(g => g?.id !== genre?.id))
   }
 
+  const handleRemoveGenres = (genre: GenresType) => {
+    setSelectedGenres(selectedGenres?.filter(selected => selected?.id !== genre?.id ))
+    setGenres([...genres, genre])
+  }
+
   return (
     <div>
       <p>Genres:</p>
+        {selectedGenres?.map(genre => (
+            <button key={genre.id} onClick={() =>handleRemoveGenres(genre)}>{genre.name}</button>
+        ) ) 
+
+        }
         {genres.map((genre: GenresType) => (
           <button key={genre.id} onClick={() => handleAddGenres(genre)}>{genre.name}</button>
         ))}
