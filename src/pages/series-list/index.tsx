@@ -7,7 +7,8 @@ export default function SeriesList() {
   const [seriesList, setSeriesList] = useState<Series[]>([]);
   const [genres, setGenres] = useState<GenresType[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType[]>([]);
-  const [jojo, setJojo] = useState<Series>();
+  const [selectedSerie, setSelectedSerie] = useState<Series>();
+  const [serieCredit, setSerieCredits] = useState<any>();
 
   const genresIDs = (selectedGenres: any[]) => {
     if (selectedGenres.length < 1) return "";
@@ -17,45 +18,71 @@ export default function SeriesList() {
 
   const genreIds = genresIDs(selectedGenres);
 
-  useEffect(() => {
-    getSeries();
-    getJojo();
-  }, [selectedGenres]);
-
-  const getJojo = () => {
-    fetch(
-      `https://api.themoviedb.org/3/tv/45790?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
-    )
-      .then((response) => response.json())
-      .then((data) => setJojo(data));
-    //.then((data) => console.log(data));
-  };
-
   const getSeries = () => {
     fetch(
       `https://api.themoviedb.org/3/discover/tv?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a&with_genres=${genreIds}`
     )
       .then((res) => res.json())
-      .then((json) => setSeriesList(json.results));
+      .then((json) => {
+        setSeriesList(json.results);
+        setSelectedSerie(json.results[0]);
+        // console.log(json.results[8]);
+      })
+      .catch((error) => {
+        console.error(
+          "Une erreur s'est produite lors de la récupération des séries : ",
+          error
+        );
+      });
   };
+
+  const getSeriesCredits = (selectedID: any) => {
+    fetch(
+      `https://api.themoviedb.org/3/tv/${selectedID}/credits?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        // console.log(json);
+        setSerieCredits(json);
+      })
+      .catch((error) => {
+        console.error(
+          "Une erreur s'est produite lors de la récupération des crédits : ",
+          error
+        );
+      });
+  };
+
+  const handleSeriesHover = (series: Series) => {
+    setSelectedSerie(series);
+    getSeriesCredits(series.id);
+  };
+
+  useEffect(() => {
+    getSeries();
+  }, [selectedGenres]);
 
   return (
     <div>
-      <div>
-        <img
-          src="https://image.tmdb.org/t/p/w500/mLKN1dsimKPiXCZ48KED0X8a02t.jpg"
-          alt=""
-        />
-        {jojo && (
+      {selectedSerie && serieCredit && (
+        <div>
+          <h1>{selectedSerie.name}</h1>
+          <p>{selectedSerie.overview}</p>
           <div>
-            <h2>{jojo.name}</h2>
-            <h2>{jojo.overview}</h2>
-            <h2>{jojo.number_of_seasons} saisons</h2>
-            <h2>{jojo.number_of_episodes} épisodes</h2>
-            <h2>Année de diffusion : {jojo.first_air_date.split("-")[0]}</h2>
+            Acteurs :
+            {serieCredit.cast.map((actor: any, index: any) => {
+              if (actor.known_for_department === "Acting") {
+                return <p key={index}>{actor.name} </p>;
+              }
+            })}
           </div>
-        )}
-      </div>
+          <img
+            src={`https://image.tmdb.org/t/p/w500${selectedSerie.backdrop_path}`}
+            alt={selectedSerie.name}
+          />
+        </div>
+      )}
+
       <Genres
         genres={genres}
         setGenres={setGenres}
@@ -65,7 +92,7 @@ export default function SeriesList() {
       <div>
         <h3>Liste</h3>
         {seriesList.map((series, index) => (
-          <div key={index}>
+          <div key={index} onMouseOver={() => handleSeriesHover(series)}>
             <img
               src={`https://image.tmdb.org/t/p/w500${series.poster_path}`}
               alt={series.name}
