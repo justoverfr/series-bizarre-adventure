@@ -1,16 +1,10 @@
 import { Series } from "@/types";
 
-function SerieHeader({
-  selectedSerie,
-  serieCredit,
-}: {
-  selectedSerie: Series;
-  serieCredit: any;
-}) {
+function SerieHeader({ selectedSerie }: { selectedSerie: Series }) {
   //   console.log(selectedSerie);
   return (
     <div>
-      {selectedSerie && serieCredit && (
+      {selectedSerie && (
         <div>
           <h1>{selectedSerie.name}</h1>
           <p>{selectedSerie.overview}</p>

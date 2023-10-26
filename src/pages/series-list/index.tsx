@@ -1,41 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Series } from "@/types";
 import Genres from "@/components/Genres";
 import SerieHeader from "@/components/SerieHeader";
 import { GenresType } from "@/types";
 import SerieCard from "@/components/SerieCard";
+import { useFetchSeries } from "@/hooks/useFetchSeries";
 
 export default function SeriesList() {
-  const [seriesList, setSeriesList] = useState<Series[]>([]);
   const [genres, setGenres] = useState<GenresType[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType[]>([]);
+  const seriesList = useFetchSeries(selectedGenres);
   const [selectedSerie, setSelectedSerie] = useState<Series>();
-  const [serieCredit, setSerieCredits] = useState<any>();
-
-  const genresIDs = (selectedGenres: any[]) => {
-    if (selectedGenres.length < 1) return "";
-    const genresID = selectedGenres?.map((genre: { id: any }) => genre?.id);
-    return genresID?.reduce((acc: string, curr: string) => acc + ", " + curr);
-  };
-
-  const genreIds = genresIDs(selectedGenres);
-
-  const getSeries = () => {
-    fetch(
-      `https://api.themoviedb.org/3/discover/tv?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a&with_genres=${genreIds}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json.results[0].id);
-        setSeriesList(json.results);
-      })
-      .catch((error) => {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des séries : ",
-          error
-        );
-      });
-  };
 
   const getSerie = (selectedID: any) => {
     fetch(
@@ -54,36 +29,14 @@ export default function SeriesList() {
       });
   };
 
-  const getSeriesCredits = (selectedID: any) => {
-    fetch(
-      `https://api.themoviedb.org/3/tv/${selectedID}/credits?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        // console.log(json);
-        setSerieCredits(json);
-      })
-      .catch((error) => {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des crédits : ",
-          error
-        );
-      });
-  };
-
   const handleSeriesHover = (series: Series) => {
     setSelectedSerie(series);
-    getSeriesCredits(series.id);
     getSerie(series.id);
   };
 
-  useEffect(() => {
-    getSeries();
-  }, [selectedGenres]);
-
   return (
     <div>
-      <SerieHeader selectedSerie={selectedSerie!} serieCredit={serieCredit} />
+      <SerieHeader selectedSerie={selectedSerie!} />
 
       <Genres
         genres={genres}
