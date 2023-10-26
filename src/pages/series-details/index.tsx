@@ -1,79 +1,14 @@
 import { useParams } from "react-router-dom";
 import SerieHeader from "@/components/SerieHeader";
-import { Series } from "@/types";
-import { useEffect, useState } from "react";
+import fetchSerie from "@/hooks/useSerieData";
+import fetchSerieCredits from "@/hooks/getSerieCredits";
+import fetchSerieEpisodes from "@/hooks/getSerieEpisodes";
 
 function SerieDetails() {
   const { id } = useParams();
-  const [selectedSerie, setSelectedSerie] = useState<Series>();
-  const [serieCredit, setSerieCredits] = useState<any>();
-  const [seasonEpisodes, setSeasonEpisodes] = useState<any>({});
-
-  const getSeriesCredits = (selectedID: any) => {
-    fetch(
-      `https://api.themoviedb.org/3/tv/${selectedID}/credits?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setSerieCredits(json);
-      })
-      .catch((error) => {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des crédits : ",
-          error
-        );
-      });
-  };
-
-  const getSerie = (selectedID: any) => {
-    fetch(
-      `https://api.themoviedb.org/3/tv/${selectedID}?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setSelectedSerie(json);
-        // console.log(json);
-      })
-      .catch((error) => {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des crédits : ",
-          error
-        );
-      });
-  };
-
-  const getSeasonEpisodes = (selectedID: any, seasonNumber: number) => {
-    fetch(
-      `https://api.themoviedb.org/3/tv/${selectedID}/season/${seasonNumber}?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json.episodes);
-        setSeasonEpisodes((prevEpisodes: any) => ({
-          ...prevEpisodes,
-          [seasonNumber]: json.episodes,
-        }));
-      })
-      .catch((error) => {
-        console.error(
-          `Une erreur s'est produite lors de la récupération des épisodes de la saison ${seasonNumber} : `,
-          error
-        );
-      });
-  };
-
-  useEffect(() => {
-    getSerie(id);
-    getSeriesCredits(id);
-  }, [id]);
-
-  useEffect(() => {
-    if (selectedSerie) {
-      selectedSerie.seasons.forEach((season: { season_number: number }) => {
-        getSeasonEpisodes(id, season.season_number);
-      });
-    }
-  }, [selectedSerie, id]);
+  const { selectedSerie } = fetchSerie(id!);
+  const { serieCredit } = fetchSerieCredits(id!);
+  const { seasonEpisodes } = fetchSerieEpisodes(id!);
 
   return (
     <>
