@@ -3,7 +3,7 @@ import { Series } from "@/types";
 import Genres from "@/components/Genres";
 import SerieHeader from "@/components/SerieHeader";
 import { GenresType } from "@/types";
-import { Link } from "react-router-dom";
+import SerieCard from "@/components/SerieCard";
 
 export default function SeriesList() {
   const [seriesList, setSeriesList] = useState<Series[]>([]);
@@ -95,14 +95,7 @@ export default function SeriesList() {
         <h3>Liste</h3>
         {seriesList.map((series, index) => (
           <div key={index} onMouseOver={() => handleSeriesHover(series)}>
-            <Link to={`/series/${series.id}`}>
-              <img
-                src={`https://image.tmdb.org/t/p/w500${series.poster_path}`}
-                alt={series.name}
-              />
-              <p>{series.name}</p>
-              <p>{series.vote_average}</p>
-            </Link>
+            <SerieCard series={series} />
           </div>
         ))}
       </div>
