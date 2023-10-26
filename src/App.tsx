@@ -6,6 +6,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SeriesList from "./pages/series-list";
 import SignUpPage from "@/pages/signup/index";
+import SeriesDetails from "./pages/series-details";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -19,8 +20,9 @@ function App() {
             element={<h1 className="text-3xl font-bold underline">Home</h1>}
           />
           <Route path="/user" element={<h1>Profil</h1>} />
-          <Route path="/series-list" element={ <SeriesList/>} />
+          <Route path="/series-list" element={<SeriesList />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/series/:id" element={<SeriesDetails />} />
         </Routes>
       </Router>
     </>
