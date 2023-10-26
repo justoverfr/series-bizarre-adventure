@@ -11,6 +11,7 @@ import SeriesList from "./pages/series-list";
 import SeriesDetails from "./pages/series-details";
 import ProfilePage from "./pages/profil";
 import LogInPage from "./pages/login";
+import FavoriteSeriesList from "./pages/favorites";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="/series-list" element={<SeriesList />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/series/:id" element={<SeriesDetails />} />
+          <Route path="/favorites" element={<FavoriteSeriesList />} />
         </Routes>
       </Router>
     </>
