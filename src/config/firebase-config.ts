@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { EmailAuthProvider, getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Configuration de Firebase
 const firebaseConfig = {
@@ -14,8 +15,8 @@ const firebaseConfig = {
   measurementId: "G-FNQBCMY9D0",
 };
 
-// Initialiser Firebase
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const provider = new EmailAuthProvider();
+export const db = getFirestore(app);
