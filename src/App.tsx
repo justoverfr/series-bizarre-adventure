@@ -9,6 +9,7 @@ import CalendarPage from "./pages/calendar";
 import NavBar from "./components/NavBar";
 import SeriesList from "./pages/series-list";
 import SeriesDetails from "./pages/series-details";
+import ProfilePage from "./pages/profil";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           {/* Liste des pages */}
           <Route element={<DefaultContainer />}>
-            <Route path="/user" element={<h1>Profil</h1>} />
+            <Route path="/user" element={<ProfilePage />} />
 
             <Route path="/calendar" element={<CalendarPage />} />
           </Route>
