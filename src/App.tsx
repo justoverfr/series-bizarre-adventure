@@ -10,6 +10,7 @@ import NavBar from "./components/NavBar";
 import SeriesList from "./pages/series-list";
 import SeriesDetails from "./pages/series-details";
 import ProfilePage from "./pages/profil";
+import LogInPage from "./pages/login";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -26,6 +27,7 @@ function App() {
 
           <Route element={<AuthContainer />}>
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/login" element={<LogInPage />} />
           </Route>
 
           <Route
