@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Series } from "@/types";
 import Genres from "@/components/Genres";
+import SerieHeader from "@/components/SerieHeader";
 import { GenresType } from "@/types";
+import { Link } from "react-router-dom";
 
 export default function SeriesList() {
   const [seriesList, setSeriesList] = useState<Series[]>([]);
@@ -64,24 +66,7 @@ export default function SeriesList() {
 
   return (
     <div>
-      {selectedSerie && serieCredit && (
-        <div>
-          <h1>{selectedSerie.name}</h1>
-          <p>{selectedSerie.overview}</p>
-          <div>
-            Acteurs :
-            {serieCredit.cast.map((actor: any, index: any) => {
-              if (actor.known_for_department === "Acting") {
-                return <p key={index}>{actor.name} </p>;
-              }
-            })}
-          </div>
-          <img
-            src={`https://image.tmdb.org/t/p/w500${selectedSerie.backdrop_path}`}
-            alt={selectedSerie.name}
-          />
-        </div>
-      )}
+      <SerieHeader selectedSerie={selectedSerie} serieCredit={serieCredit} />
 
       <Genres
         genres={genres}
@@ -93,12 +78,14 @@ export default function SeriesList() {
         <h3>Liste</h3>
         {seriesList.map((series, index) => (
           <div key={index} onMouseOver={() => handleSeriesHover(series)}>
-            <img
-              src={`https://image.tmdb.org/t/p/w500${series.poster_path}`}
-              alt={series.name}
-            />
-            <p>{series.name}</p>
-            <p>{series.vote_average}</p>
+            <Link to={`/series/${series.id}`}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${series.poster_path}`}
+                alt={series.name}
+              />
+              <p>{series.name}</p>
+              <p>{series.vote_average}</p>
+            </Link>
           </div>
         ))}
       </div>
