@@ -26,13 +26,29 @@ export default function SeriesList() {
     )
       .then((res) => res.json())
       .then((json) => {
+        console.log(json.results[0].id);
         setSeriesList(json.results);
-        setSelectedSerie(json.results[0]);
-        // console.log(json.results[8]);
       })
       .catch((error) => {
         console.error(
           "Une erreur s'est produite lors de la récupération des séries : ",
+          error
+        );
+      });
+  };
+
+  const getSerie = (selectedID: any) => {
+    fetch(
+      `https://api.themoviedb.org/3/tv/${selectedID}?api_key=2ec96d5b6b5bfb03b3f398ea23d78b3a`
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        setSelectedSerie(json);
+        console.log(json);
+      })
+      .catch((error) => {
+        console.error(
+          "Une erreur s'est produite lors de la récupération des crédits : ",
           error
         );
       });
@@ -58,6 +74,7 @@ export default function SeriesList() {
   const handleSeriesHover = (series: Series) => {
     setSelectedSerie(series);
     getSeriesCredits(series.id);
+    getSerie(series.id);
   };
 
   useEffect(() => {
@@ -66,7 +83,7 @@ export default function SeriesList() {
 
   return (
     <div>
-      <SerieHeader selectedSerie={selectedSerie} serieCredit={serieCredit} />
+      <SerieHeader selectedSerie={selectedSerie!} serieCredit={serieCredit} />
 
       <Genres
         genres={genres}
