@@ -1,18 +1,12 @@
 import { useParams } from "react-router-dom";
-import { db } from "@/config/firebase-config";
-import {
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-
+import { useEffect, useState } from "react";
 import SerieHeader from "@/components/SerieHeader";
 import fetchSerie from "@/hooks/useSerieData";
 import fetchSerieCredits from "@/hooks/getSerieCredits";
 import fetchSerieEpisodes from "@/hooks/getSerieEpisodes";
-import { useEffect, useState } from "react";
+import { checkIfFollowed, toggleFollowStatus } from "@/lib/auth/FollowRequest";
+import ActorsList from "@/components/ActorList";
+import SeasonList from "@/components/SeasonList";
 
 function SerieDetails() {
   const { id } = useParams();
@@ -22,15 +16,10 @@ function SerieDetails() {
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
-    const userDocRef = doc(db, "Users", "XU5Okh6EiJXR2dkTgO2c");
-    getDoc(userDocRef)
-      .then((userDoc) => {
-        if (userDoc.exists()) {
-          const favorites = userDoc.data().Favorite_id;
-          if (favorites.includes(id)) {
-            setIsFollowing(true);
-          }
-        }
+    const userId = "XU5Okh6EiJXR2dkTgO2c";
+    checkIfFollowed(userId, id)
+      .then((result) => {
+        setIsFollowing(result);
       })
       .catch((error) => {
         console.error(
@@ -38,75 +27,33 @@ function SerieDetails() {
           error
         );
       });
-  }, [id]);
+  });
 
   const toggleFollowing = async () => {
-    const userDocRef = doc(db, "Users", "XU5Okh6EiJXR2dkTgO2c");
-
-    try {
-      if (isFollowing) {
-        await updateDoc(userDocRef, {
-          Favorite_id: arrayRemove(id),
-        });
-      } else {
-        await updateDoc(userDocRef, {
-          Favorite_id: arrayUnion(id),
-        });
-      }
-
-      setIsFollowing(!isFollowing);
-      console.log("Données mises à jour avec succès");
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour des données : ", error);
-    }
+    const userId = "XU5Okh6EiJXR2dkTgO2c";
+    const newFollowStatus = await toggleFollowStatus(userId, id, isFollowing);
+    setIsFollowing(newFollowStatus);
   };
 
   return (
     <>
       <div>
-        <SerieHeader selectedSerie={selectedSerie!} serieCredit={serieCredit} />
+        <SerieHeader selectedSerie={selectedSerie!} />
       </div>
       <div>
-        Acteurs :{" "}
-        {serieCredit
-          ? serieCredit.cast
-              .filter((actor: any) => actor.known_for_department === "Acting")
-              .map((actor: any) => actor.name)
-              .join(", ")
-          : "Chargement des acteurs en cours..."}
+        {serieCredit ? (
+          <ActorsList actors={serieCredit.cast} />
+        ) : (
+          <p>Chargement des acteurs en cours...</p>
+        )}
       </div>
       <button onClick={toggleFollowing}>
         {isFollowing ? "Ne plus suivre" : "Suivre"}
       </button>
-      <div>
-        Saisons :
-        <ul>
-          {selectedSerie?.seasons?.map((season: any, index: any) => (
-            <li key={index}>
-              <p>{season.name}</p>
-              {seasonEpisodes[season.season_number] && (
-                <ul>
-                  {seasonEpisodes[season.season_number].map(
-                    (episode: any, episodeIndex: number) => (
-                      <div key={episodeIndex}>
-                        <p>
-                          Épisode {episode.episode_number}: {episode.name}
-                        </p>
-                        <p>Description : {episode.overview}</p>
-                        <p>date : {episode.air_date}</p>
-                        <img
-                          src={`https://image.tmdb.org/t/p/w500${episode.still_path}`}
-                          alt={episode.name}
-                        />
-                      </div>
-                    )
-                  )}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <SeasonList
+        seasons={selectedSerie?.seasons}
+        seasonEpisodes={seasonEpisodes}
+      />
     </>
   );
 }
