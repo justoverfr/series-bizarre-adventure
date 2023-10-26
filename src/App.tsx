@@ -1,8 +1,3 @@
-// import { useState } from "react";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
-// import "./App.css";
-
 import {
   BrowserRouter as Router,
   Outlet,
@@ -12,7 +7,8 @@ import {
 import SignUpPage from "@/pages/signup/index";
 import CalendarPage from "./pages/calendar";
 import NavBar from "./components/NavBar";
-
+import SeriesList from "./pages/series-list";
+import SeriesDetails from "./pages/series-details";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -35,6 +31,10 @@ function App() {
             path="/"
             element={<h1 className="text-3xl font-bold underline">Home</h1>}
           />
+          <Route path="/user" element={<h1>Profil</h1>} />
+          <Route path="/series-list" element={<SeriesList />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/series/:id" element={<SeriesDetails />} />
         </Routes>
       </Router>
     </>
