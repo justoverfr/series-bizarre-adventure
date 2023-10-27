@@ -1,32 +1,45 @@
 import { UserCircle2 } from "lucide-react";
 import { BellDot } from "lucide-react";
 import { Search } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const strokeWidth = 1.5;
 
 function NavBar() {
+  const [searchQuery, setSearchQuery] = useState(""); // État pour stocker la recherche
+
+  const handleSearchInputChange = (e: any) => {
+    // Gérez le changement de l'input de recherche
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <div className="flex justify-between sticky bg-[rgba(65,65,65,0.77)] p-8">
       <ul className="flex flex-row max-w-xl gap-5">
         <li>
-          <a href="#">Home</a>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="#">Calendar</a>
+          <Link to="/calendar">Calendar</Link>
         </li>
         <li>
-          <a href="#">Shows</a>
+          <Link to="/shows">Shows</Link>
         </li>
         <li>
-          <a href="#">Favoris</a>
+          <Link to="/favorites">Favoris</Link>
         </li>
       </ul>
       <div className="flex items-center w-3/5 gap-3">
         <input
           className="flex-grow px-4 py-1 rounded-md bg-[#242424] focus:outline-none focus:ring-2 focus:ring-[#6643b5] focus:border-transparent"
           placeholder="Search"
+          value={searchQuery}
+          onChange={handleSearchInputChange}
         />
-        <Search size={28} color="#ffffff" strokeWidth={1.5} />
+        <Link to={`/series-list?query=${searchQuery}`}>
+          <Search size={28} color="#ffffff" strokeWidth={1.5} />
+        </Link>
       </div>
       <div className="flex flex-row gap-5">
         <BellDot
