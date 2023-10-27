@@ -24,7 +24,7 @@ function App() {
             <Route path="/user" element={<ProfilePage />} />
             <Route path="/favorites" element={<FavoriteSeriesList />} />
             <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/series-list" element={<SeriesList />} />
+            <Route path="/" element={<SeriesList />} />
           </Route>
 
           <Route element={<AuthContainer />}>
