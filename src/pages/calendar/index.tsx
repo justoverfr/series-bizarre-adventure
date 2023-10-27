@@ -65,7 +65,7 @@ export default function CalendarPage() {
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        setUserFavorites(userData?.favorites);
+        setUserFavorites(userData?.Favorite_id);
       }
     } else navigate("/login");
   });
