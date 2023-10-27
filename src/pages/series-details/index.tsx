@@ -32,7 +32,7 @@ function SerieDetails() {
   const scrollRef: RefObject<HTMLDivElement> = useRef(null);
 
   useEffect(() => {
-    const userId = "XU5Okh6EiJXR2dkTgO2c";
+    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
     checkIfFollowed(userId, id)
       .then((result) => {
         setIsFollowing(result);
@@ -46,7 +46,7 @@ function SerieDetails() {
   });
 
   const toggleFollowing = async () => {
-    const userId = "XU5Okh6EiJXR2dkTgO2c";
+    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
     const newFollowStatus = await toggleFollowStatus(userId, id, isFollowing);
     setIsFollowing(newFollowStatus);
   };
@@ -65,7 +65,7 @@ function SerieDetails() {
       return;
     }
 
-    const userId = "XU5Okh6EiJXR2dkTgO2c";
+    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
     const serieId = id;
 
     const userRef = doc(db, "Users", userId);
@@ -127,10 +127,18 @@ function SerieDetails() {
           <p>Chargement des acteurs en cours...</p>
         )}
       </div>
-      <button onClick={toggleFollowing}>
-        {isFollowing ? "Ne plus suivre" : "Suivre"}
+      <button
+        className="w-52 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-transparent bg-[#6643b5] mt-10"
+        onClick={toggleFollowing}
+      >
+        {isFollowing ? "Ne plus suivre 😕" : "Suivre 🤩"}
       </button>
-      <button onClick={handleScrollToComments}>Accéder commentaire</button>
+      <button
+        className="w-1/6 px-4 py-2 ml-5 border border-gray-300 rounded-md focus:outline-none focus:border-transparent bg-[#6643b5]"
+        onClick={handleScrollToComments}
+      >
+        <p>Accéder aux commentaires 👇</p>
+      </button>
       <SeasonList
         seasons={selectedSerie?.seasons}
         seasonEpisodes={seasonEpisodes}
