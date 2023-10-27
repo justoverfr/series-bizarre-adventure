@@ -7,16 +7,18 @@ function FavoriteSeriesList() {
 
   return (
     <div>
-      <h2>Vidéos Favorites</h2>
-      {seriesDetails ? (
-        seriesDetails.map((series, index) => (
-          <div key={index}>
-            <SerieCard series={series} />
-          </div>
-        ))
-      ) : (
-        <p>Chargement des séries en cours...</p>
-      )}
+      <h3 className="font-bold text-[40px]">Vidéos Favorites</h3>
+      <div className="grid grid-cols-5 gap-4 p-4">
+        {seriesDetails ? (
+          seriesDetails.map((series, index) => (
+            <div key={index}>
+              <SerieCard series={series} />
+            </div>
+          ))
+        ) : (
+          <p>Chargement des séries en cours...</p>
+        )}
+      </div>
     </div>
   );
 }
