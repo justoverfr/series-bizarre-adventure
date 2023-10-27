@@ -1,96 +1,72 @@
 import Day from "./Day";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/config/firebase-config";
-import { useState } from "react";
+import { auth, db } from "@/config/firebase-config";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const mondaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const tuesdaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const wednesdaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const thursdaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const fridaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const saturdaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
-const sundaySeries = [
-  {
-    title: "Bob's Burgers",
-    image_url:
-      "https://www.komar.de/media/catalog/product/cache/6/image/9df78eab33525d08d6e5fb8d27136e95/4/-/4-4126_avengers_infinity_war_movie_poster_web.jpg",
-  },
-  {
-    title: "The Simpsons",
-    image_url: "",
-  },
-];
+import { getFavoritesUpcomingReleases } from "./utils";
+import { Episodes } from "@/types";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function CalendarPage() {
+  const [mondaySeries, setMondaySeries] = useState<Episodes[]>([]);
+  const [tuesdaySeries, setTuesdaySeries] = useState<Episodes[]>([]);
+  const [wednesdaySeries, setWednesdaySeries] = useState<Episodes[]>([]);
+  const [thursdaySeries, setThursdaySeries] = useState<Episodes[]>([]);
+  const [fridaySeries, setFridaySeries] = useState<Episodes[]>([]);
+  const [saturdaySeries, setSaturdaySeries] = useState<Episodes[]>([]);
+  const [sundaySeries, setSundaySeries] = useState<Episodes[]>([]);
+
+  const [userFavorites, setUserFavorites] = useState<number[]>([]);
+
+  useEffect(() => {
+    async function getReleases() {
+      const upcomingReleases = await getFavoritesUpcomingReleases(
+        userFavorites
+      );
+      if (upcomingReleases["monday"])
+        setMondaySeries(upcomingReleases["monday"]);
+      if (upcomingReleases["tuesday"])
+        setTuesdaySeries(upcomingReleases["tuesday"]);
+      if (upcomingReleases["wednesday"])
+        setWednesdaySeries(upcomingReleases["wednesday"]);
+      if (upcomingReleases["thursday"])
+        setThursdaySeries(upcomingReleases["thursday"]);
+      if (upcomingReleases["friday"])
+        setFridaySeries(upcomingReleases["friday"]);
+      if (upcomingReleases["saturday"])
+        setSaturdaySeries(upcomingReleases["saturday"]);
+      if (upcomingReleases["sunday"])
+        setSundaySeries(upcomingReleases["sunday"]);
+    }
+
+    getReleases();
+  }, [
+    mondaySeries,
+    tuesdaySeries,
+    wednesdaySeries,
+    thursdaySeries,
+    fridaySeries,
+    saturdaySeries,
+    sundaySeries,
+    userFavorites,
+  ]);
+
   const [user, setUser] = useState({});
+  const [userId, setUserId] = useState("");
 
   const navigate = useNavigate();
 
-  onAuthStateChanged(auth, (currentUser) => {
+  onAuthStateChanged(auth, async (currentUser) => {
     if (currentUser) {
       setUser(currentUser);
-      console.log(currentUser);
+      setUserId(currentUser.uid);
+
+      const userDocRef = doc(db, "Users", currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setUserFavorites(userData?.favorites);
+      }
     } else navigate("/login");
   });
 
