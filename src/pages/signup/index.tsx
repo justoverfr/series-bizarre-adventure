@@ -4,6 +4,7 @@ import BigButton from "@/components/BigButton";
 import "./signup.css";
 import { useNavigate } from "react-router-dom";
 import { signup } from "@/lib/auth";
+import { s } from "vitest/dist/reporters-5f784f42.js";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
@@ -13,6 +14,7 @@ export default function SignUpPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const handleSignup = async () => {
+    console.log("signup");
     setErrorMessage("");
     if (email && password && username) {
       const user = await signup(username, email, password);
@@ -21,6 +23,10 @@ export default function SignUpPage() {
       } else {
         setErrorMessage("Cet email est déjà utilisé");
       }
+    } else {
+      if (!username) setErrorMessage("Veuillez entrer un nom d'utilisateur");
+      if (!email) setErrorMessage("Veuillez entrer un email");
+      if (!password) setErrorMessage("Veuillez entrer un mot de passe");
     }
   };
 
@@ -49,12 +55,7 @@ export default function SignUpPage() {
         {errorMessage != "" && (
           <p className="text-red-600 text-sm">{errorMessage}</p>
         )}
-        <BigButton
-          text="SignUp"
-          onClick={() => {
-            handleSignup;
-          }}
-        />
+        <BigButton text="SignUp" onClick={handleSignup} />
       </div>
     </div>
   );
