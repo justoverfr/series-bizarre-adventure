@@ -6,6 +6,8 @@ function SeasonList({
   seasonEpisodes: any;
 }) {
   const maxDescriptionLength = 20;
+  const defaultImage =
+    "https://image.tmdb.org/t/p/w500/2KKZF2WdfEesGs6iinlwrjyH8n.jpg";
 
   return (
     <div>
@@ -24,6 +26,9 @@ function SeasonList({
                       className="rounded-md"
                       src={`https://image.tmdb.org/t/p/w500${episode.still_path}`}
                       alt={episode.name}
+                      onError={(e) => {
+                        e.target.src = defaultImage; // Chargez l'image par défaut en cas d'erreur
+                      }}
                     />
                     <p>
                       Description :{" "}
