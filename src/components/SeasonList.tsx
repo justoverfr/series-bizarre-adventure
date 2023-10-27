@@ -18,12 +18,12 @@ function SeasonList({
             <div className="flex flex-row gap-3">
               {seasonEpisodes[season.season_number].map(
                 (episode: any, episodeIndex: number) => (
-                  <div key={episodeIndex}>
+                  <div key={episodeIndex} className="w-[300px]">
                     <p className="font-bold text-[20px]">
                       Épisode {episode.episode_number}: {episode.name}
                     </p>
                     <img
-                      className="rounded-md"
+                      className="rounded-md max-w-[200px] max-h-[300px]"
                       src={`https://image.tmdb.org/t/p/w500${episode.still_path}`}
                       alt={episode.name}
                       onError={(e) => {
