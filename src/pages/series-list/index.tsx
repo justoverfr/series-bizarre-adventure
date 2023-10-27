@@ -5,8 +5,12 @@ import SerieCard from "@/components/SerieCard";
 import { useFetchSeries } from "@/hooks/useFetchSeries";
 import useJojo from "@/hooks/getJojo";
 import Jojo from "@/components/Jojo";
+import { useLocation } from "react-router-dom";
 
 export default function SeriesList() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.get("query");
   const [genres, setGenres] = useState<GenresType[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<GenresType[]>([]);
   const seriesList = useFetchSeries(selectedGenres);

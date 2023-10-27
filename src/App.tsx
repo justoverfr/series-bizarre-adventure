@@ -22,8 +22,9 @@ function App() {
           {/* Liste des pages */}
           <Route element={<DefaultContainer />}>
             <Route path="/user" element={<ProfilePage />} />
-
+            <Route path="/favorites" element={<FavoriteSeriesList />} />
             <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/series-list" element={<SeriesList />} />
           </Route>
 
           <Route element={<AuthContainer />}>
@@ -36,7 +37,7 @@ function App() {
             element={<h1 className="text-3xl font-bold underline">Home</h1>}
           />
           <Route path="/user" element={<h1>Profil</h1>} />
-          <Route path="/series-list" element={<SeriesList />} />
+
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/series/:id" element={<SeriesDetails />} />
           <Route path="/favorites" element={<FavoriteSeriesList />} />

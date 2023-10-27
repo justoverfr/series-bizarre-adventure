@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import SerieHeader from "@/components/SerieHeader";
 import fetchSerie from "@/hooks/useSerieData";
 import fetchSerieCredits from "@/hooks/getSerieCredits";
@@ -8,7 +8,17 @@ import { checkIfFollowed, toggleFollowStatus } from "@/lib/auth/FollowRequest";
 import ActorsList from "@/components/ActorList";
 import SeasonList from "@/components/SeasonList";
 import { db } from "@/config/firebase-config";
-import { collection, addDoc } from "firebase/firestore";
+import { Comment } from "@/types/Comment";
+import CommentSection from "@/components/CommentSection";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 function SerieDetails() {
   const { id } = useParams();
@@ -17,7 +27,9 @@ function SerieDetails() {
   const { seasonEpisodes } = fetchSerieEpisodes(id!);
   const [isFollowing, setIsFollowing] = useState(false);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState<Comment>();
+  const [comments, setComments] = useState<Comment[]>([]);
+  const scrollRef: RefObject<HTMLDivElement> = useRef(null);
 
   useEffect(() => {
     const userId = "XU5Okh6EiJXR2dkTgO2c";
@@ -55,15 +67,53 @@ function SerieDetails() {
 
     const userId = "XU5Okh6EiJXR2dkTgO2c";
     const serieId = id;
-    const ratingData = {
-      userId,
-      serieId,
-      rating,
-      comment,
-    };
-    const ratingsCollection = collection(db, "Ratings");
-    await addDoc(ratingsCollection, ratingData);
+
+    const userRef = doc(db, "Users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const userName = userDoc.data().name;
+
+      const ratingData = {
+        userId,
+        serieId,
+        rating,
+        comment,
+        userName,
+      };
+
+      const ratingsCollection = collection(db, "Ratings");
+      await addDoc(ratingsCollection, ratingData);
+    }
   };
+
+  const handleScrollToComments = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const fetchComments = async () => {
+    const serieId = id;
+    const commentsCollection = collection(db, "Ratings");
+
+    const commentsQuery = query(
+      commentsCollection,
+      where("serieId", "==", serieId)
+    );
+    const commentSnapshots = await getDocs(commentsQuery);
+
+    const commentsData: any[] = [];
+    commentSnapshots.forEach((doc) => {
+      commentsData.push(doc.data());
+    });
+
+    setComments(commentsData);
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [id]);
 
   return (
     <>
@@ -80,28 +130,21 @@ function SerieDetails() {
       <button onClick={toggleFollowing}>
         {isFollowing ? "Ne plus suivre" : "Suivre"}
       </button>
-      <div>
-        <h3>Donner une note et un commentaire</h3>
-        <label>
-          Note (de 1 à 5):
-          <input
-            type="number"
-            min="1"
-            max="5"
-            value={rating}
-            onChange={handleRatingChange}
-          />
-        </label>
-        <label>
-          Commentaire:
-          <textarea value={comment} onChange={handleCommentChange} />
-        </label>
-        <button onClick={handleSubmitRating}>Soumettre</button>
-      </div>
+      <button onClick={handleScrollToComments}>Accéder commentaire</button>
       <SeasonList
         seasons={selectedSerie?.seasons}
         seasonEpisodes={seasonEpisodes}
       />
+      <div ref={scrollRef}>
+        <CommentSection
+          rating={rating}
+          comment={comment}
+          comments={comments}
+          handleRatingChange={handleRatingChange}
+          handleCommentChange={handleCommentChange}
+          handleSubmitRating={handleSubmitRating}
+        />
+      </div>
     </>
   );
 }
