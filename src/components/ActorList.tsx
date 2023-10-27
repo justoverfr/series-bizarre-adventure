@@ -1,12 +1,12 @@
 import { Actors } from "@/types/Actors";
 
 function ActorsList({ actors }: { actors: Actors[] }) {
+  const actorNames = actors.map((actor) => actor.name);
+  const distribution = `Distribution : ${actorNames.join(", ")}`;
   return (
     <div>
       <h2>Acteurs</h2>
-      {actors.map((actor) => (
-        <p key={actor.id}>{actor.name}</p>
-      ))}
+      <p>{distribution}</p>
     </div>
   );
 }

@@ -25,6 +25,7 @@ function App() {
             <Route path="/favorites" element={<FavoriteSeriesList />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/" element={<SeriesList />} />
+            <Route path="/series/:id" element={<SeriesDetails />} />
           </Route>
 
           <Route element={<AuthContainer />}>
@@ -39,7 +40,7 @@ function App() {
           <Route path="/user" element={<h1>Profil</h1>} />
 
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/series/:id" element={<SeriesDetails />} />
+
           <Route path="/favorites" element={<FavoriteSeriesList />} />
         </Routes>
       </Router>
