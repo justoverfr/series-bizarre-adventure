@@ -1,4 +1,8 @@
 import Day from "./Day";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/config/firebase-config";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const mondaySeries = [
   {
@@ -79,6 +83,17 @@ const sundaySeries = [
 ];
 
 export default function CalendarPage() {
+  const [user, setUser] = useState({});
+
+  const navigate = useNavigate();
+
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      setUser(currentUser);
+      console.log(currentUser);
+    } else navigate("/login");
+  });
+
   return (
     <div className="flex flex-col pl-10 bg-[rgba(47,47,47,0.97)] border border-[#6643b5] p-8 ml-10 mt-10 mr-10 mb-10 rounded-lg">
       <h1 className="text-[36px] mt-2 mb-7 text-white not-italic font-medium leading-6 font-Raleway">
