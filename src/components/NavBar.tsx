@@ -2,7 +2,7 @@ import { UserCircle2 } from "lucide-react";
 import { BellDot } from "lucide-react";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const strokeWidth = 1.5;
 
@@ -13,6 +13,8 @@ function NavBar() {
     // Gérez le changement de l'input de recherche
     setSearchQuery(e.target.value);
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="flex justify-between sticky bg-[rgba(65,65,65,0.77)] p-8">
@@ -51,7 +53,7 @@ function NavBar() {
           size={28}
           color="#ffffff"
           strokeWidth={strokeWidth}
-          onClick={() => console.log("testProfile")}
+          onClick={() => navigate("/user")}
         />
       </div>
     </div>
