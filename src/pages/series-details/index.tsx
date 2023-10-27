@@ -10,6 +10,8 @@ import SeasonList from "@/components/SeasonList";
 import { db } from "@/config/firebase-config";
 import { Comment } from "@/types/Comment";
 import CommentSection from "@/components/CommentSection";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/config/firebase-config";
 import {
   collection,
   query,
@@ -30,9 +32,17 @@ function SerieDetails() {
   const [comment, setComment] = useState<Comment>();
   const [comments, setComments] = useState<Comment[]>([]);
   const scrollRef: RefObject<HTMLDivElement> = useRef(null);
+  const [currentUserId, setCurrentUserId] = useState("");
+
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      setCurrentUserId(currentUser.uid);
+      console.log(currentUser.uid);
+    }
+  });
 
   useEffect(() => {
-    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
+    const userId = currentUserId;
     checkIfFollowed(userId, id)
       .then((result) => {
         setIsFollowing(result);
@@ -46,7 +56,7 @@ function SerieDetails() {
   });
 
   const toggleFollowing = async () => {
-    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
+    const userId = currentUserId;
     const newFollowStatus = await toggleFollowStatus(userId, id, isFollowing);
     setIsFollowing(newFollowStatus);
   };
@@ -65,7 +75,8 @@ function SerieDetails() {
       return;
     }
 
-    const userId = "BHCtQN4EX8M9f9baa4MPOkld6iG3";
+    const userId = currentUserId;
+    console.log(userId);
     const serieId = id;
 
     const userRef = doc(db, "Users", userId);
