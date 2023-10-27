@@ -20,6 +20,7 @@ function CommentSection({
         <label>
           Note (de 1 à 5):
           <input
+            className="mt-10"
             type="number"
             min="1"
             max="5"
@@ -29,9 +30,18 @@ function CommentSection({
         </label>
         <label>
           Commentaire:
-          <textarea value={comment} onChange={handleCommentChange} />
+          <textarea
+            className="w-full mt-10 px-4 py-2  border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6643b5] focus:border-transparent text-black"
+            value={comment}
+            onChange={handleCommentChange}
+          />
         </label>
-        <button onClick={handleSubmitRating}>Soumettre</button>
+        <button
+          className="w-52 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-transparent bg-[#6643b5] mt-5"
+          onClick={handleSubmitRating}
+        >
+          Soumettre
+        </button>
       </div>
       <div>
         <h3>Commentaires</h3>

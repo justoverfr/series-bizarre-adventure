@@ -4,7 +4,6 @@ import BigButton from "@/components/BigButton";
 import "./signup.css";
 import { useNavigate } from "react-router-dom";
 import { signup } from "@/lib/auth";
-import { s } from "vitest/dist/reporters-5f784f42.js";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");

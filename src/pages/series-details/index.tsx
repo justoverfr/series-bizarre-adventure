@@ -138,10 +138,18 @@ function SerieDetails() {
           <p>Chargement des acteurs en cours...</p>
         )}
       </div>
-      <button onClick={toggleFollowing}>
-        {isFollowing ? "Ne plus suivre" : "Suivre"}
+      <button
+        className="w-52 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-transparent bg-[#6643b5] mt-10"
+        onClick={toggleFollowing}
+      >
+        {isFollowing ? "Ne plus suivre 😕" : "Suivre 🤩"}
       </button>
-      <button onClick={handleScrollToComments}>Accéder commentaire</button>
+      <button
+        className="w-1/6 px-4 py-2 ml-5 border border-gray-300 rounded-md focus:outline-none focus:border-transparent bg-[#6643b5]"
+        onClick={handleScrollToComments}
+      >
+        <p>Accéder aux commentaires 👇</p>
+      </button>
       <SeasonList
         seasons={selectedSerie?.seasons}
         seasonEpisodes={seasonEpisodes}
