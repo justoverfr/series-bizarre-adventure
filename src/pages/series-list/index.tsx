@@ -39,7 +39,7 @@ export default function SeriesList() {
       </div>
       <h3 className="font-bold text-[40px]">Nos Séries </h3>
       <div className="grid grid-cols-5 gap-4 p-4">
-        {seriesList.map((series, index) => (
+        {displayedSeries.map((series, index) => (
           <div key={index}>
             <SerieCard series={series} />
           </div>

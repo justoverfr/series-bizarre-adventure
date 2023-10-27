@@ -37,7 +37,7 @@ function NavBar() {
           value={searchQuery}
           onChange={handleSearchInputChange}
         />
-        <Link to={`/series-list?query=${searchQuery}`}>
+        <Link to={`/?query=${searchQuery}`}>
           <Search size={28} color="#ffffff" strokeWidth={1.5} />
         </Link>
       </div>
