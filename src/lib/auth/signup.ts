@@ -21,7 +21,7 @@ export async function signup(
             email,
             notifications: true,
             notifications_rate: 24,
-            favorites: [],
+            Favorite_id: [],
           });
         }
         //ensure we catch any errors at this stage to advise us if something does go wrong
