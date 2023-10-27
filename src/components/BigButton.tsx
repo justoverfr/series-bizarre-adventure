@@ -1,6 +1,6 @@
 interface BigButtonProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 export default function BigButton({ text, onClick }: BigButtonProps) {
   return (
