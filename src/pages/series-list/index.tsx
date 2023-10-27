@@ -22,21 +22,24 @@ export default function SeriesList() {
 
   return (
     <div>
-      {jojo ? (
-        <Jojo jojo={jojo} />
-      ) : (
-        <p>Chargement des données de Jojo en cours...</p>
-      )}
-
-      <Genres
-        genres={genres}
-        setGenres={setGenres}
-        selectedGenres={selectedGenres}
-        setSelectedGenres={setSelectedGenres}
-      />
-      <div>
-        <h3>Liste</h3>
-        {displayedSeries.map((series, index) => (
+      <div className="flex gap-3 w-4/5 mt-10 mx-auto bg-[rgba(65,65,65,0.77)] border border-[#6643b5] p-8 rounded-lg items-center justify-center h-fit">
+        {jojo ? (
+          <Jojo jojo={jojo} />
+        ) : (
+          <p>Chargement des données de Jojo en cours...</p>
+        )}
+      </div>
+      <div className="">
+        <Genres
+          genres={genres}
+          setGenres={setGenres}
+          selectedGenres={selectedGenres}
+          setSelectedGenres={setSelectedGenres}
+        />
+      </div>
+      <h3 className="font-bold text-[40px]">Nos Séries </h3>
+      <div className="grid grid-cols-5 gap-4 p-4">
+        {seriesList.map((series, index) => (
           <div key={index}>
             <SerieCard series={series} />
           </div>
